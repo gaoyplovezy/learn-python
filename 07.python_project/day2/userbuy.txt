@@ -1,0 +1,1 @@
+{'zhangsan': [('Book', 120), ('Coffee', 31), ('Iphone', 5800)], 'lisi': [('Coffee', 31), ('Book', 120)], 'xiaowu': [('Iphone', 5800)], 'xiaoming': [('Mac Pro', 9800), ('Coffee', 31)]}

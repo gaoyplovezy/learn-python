@@ -1,0 +1,48 @@
+1、安装cx_oracle：
+pip install cx_oracle
+
+2、安装oracle客户端：地址：http://www.oracle.com/technetwork/database/features/instant-client/index-097480.html
+这里有各种版本，结合自己的机器下载相应版本。我下载的是64位的basic12c版本（注意要和自己python的版本相符，我自己电脑里面有pythopython3.7（64位））；将解压好的文件夹路径加入环境变量（我的路径是：C:\instantclient_12_2），然后在该文件夹中新建一个文件tnsnames.ora，内容是：
+jasonChang =
+
+(DESCRIPTION =
+
+(ADDRESS_LIST =
+
+(ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.253.128)(PORT = 1521))
+
+)
+
+(CONNECT_DATA =
+
+(SERVER = DEDICATED)
+
+(SERVICE_NAME = orcl)
+
+)
+
+)
+
+3、在环境变量Path中添加路径：C:\instantclient_12_2
+
+4）代码连接数据库：
+import cx_Oracle#引用模块cx_Oracle
+ 
+#conn = cx_Oracle.connect('ncmis_poc/ncmis_poc@192.168.253.128:1521/orcl')
+conn = cx_Oracle.connect('newcmis_dev/newcmis_dev@192.168.251.248:1521/orcl.cmis')#连接数据库
+cur = conn.cursor() #获取cursor
+cur.execute("select USR_NAME from S_USR")#使用cursor进行各种操作
+#row =cur.fetchone() #返回元祖,fetchone只返回一条
+row =cur.fetchall() #返回元祖,fetchall返回全部
+ 
+for f in row:
+    print(f)
+
+conn.commit()
+cur.close()#关闭cursor
+conn.close()
+
+
+备注：如果在代码中遇到了莫名其妙的错误，请查看oracle客户端的版本是不是适合python版本，或者python和cx_Oracle 是不是合适，因为我在运行代码的时候发现了一个错误：
+conn = cx_Oracle.connect('tkinsure','ins185','10.137.146.5:1521/ursl')
+UnicodeDecodeError: 'utf-8' codec can't decode bytes in position 82-83: invalid continuation byte，乍一看是编码的问题，实际上是oracle客户端版本（instantclient_11_2）和python版本不兼容的问题，其实归根揭底还是编码的问题啦！
